@@ -1,7 +1,7 @@
 // src/user/dto/create-user.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SignUp {
+export class SignUpReqBody {
   @ApiProperty()
   email: string;
 
