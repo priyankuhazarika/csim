@@ -1,9 +1,10 @@
 import {
   Body,
   Controller,
-  Post,
+  Get,
   HttpException,
   HttpStatus,
+  Post,
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -39,5 +40,10 @@ export class AuthController {
         },
       );
     }
+  }
+
+  @Get()
+  async me() {
+    return false;
   }
 }

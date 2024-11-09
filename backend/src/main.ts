@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('C-Sim API')
@@ -12,6 +14,11 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
+
+  const document = documentFactory();
+
+  // Write the document to a JSON file
+  writeFileSync('../api-spec.json', JSON.stringify(document, null, 2));
 
   await app.listen(process.env.PORT ?? 3000);
 }
