@@ -29,7 +29,7 @@
         ]
       }
     },
-    "/auth": {
+    "/auth/signup": {
       "post": {
         "operationId": "AuthController_signUp",
         "parameters": [],
@@ -49,7 +49,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CommonResponseDto"
+                  "$ref": "#/components/schemas/SignUp"
                 }
               }
             }
@@ -59,7 +59,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -68,9 +68,62 @@
         "tags": [
           "Auth"
         ]
-      },
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginReqBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Login"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/profile": {
       "get": {
-        "operationId": "AuthController_me",
+        "operationId": "AuthController_profile",
         "parameters": [],
         "responses": {
           "200": {
@@ -78,7 +131,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CommonResponseDto"
+                  "$ref": "#/components/schemas/Profile"
                 }
               }
             }
@@ -88,7 +141,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -125,26 +178,38 @@
           "password"
         ]
       },
-      "CommonResponseDto": {
+      "SignUp": {
         "type": "object",
         "properties": {
-          "statusCode": {
-            "type": "number"
-          },
-          "message": {
+          "aud": {
             "type": "string"
           },
-          "data": {
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "user_metadata": {
             "type": "object"
           }
         },
         "required": [
-          "statusCode",
-          "message",
-          "data"
+          "aud",
+          "email",
+          "id",
+          "created_at",
+          "updated_at",
+          "user_metadata"
         ]
       },
-      "ErrorResponseDto": {
+      "ErrorResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
@@ -152,23 +217,88 @@
           },
           "message": {
             "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
           }
         },
         "required": [
           "statusCode",
-          "message",
-          "error",
-          "timestamp",
-          "path"
+          "message"
+        ]
+      },
+      "LoginReqBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "aud": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "user_metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "aud",
+          "email",
+          "id",
+          "created_at",
+          "updated_at",
+          "user_metadata"
+        ]
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "aud": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "user_metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "aud",
+          "email",
+          "id",
+          "created_at",
+          "updated_at",
+          "user_metadata"
         ]
       }
     }

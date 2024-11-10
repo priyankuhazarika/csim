@@ -1,7 +1,7 @@
 // src/user/dto/create-user.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { CommonResponse } from 'src/core/common/dto/express-response.dto';
-export class SignUpReqBody {
+export class LoginReqBody {
   @ApiProperty()
   email: string;
 
@@ -9,7 +9,7 @@ export class SignUpReqBody {
   password: string;
 }
 
-export class SignUp extends CommonResponse {
+export class Login extends CommonResponse {
   @ApiProperty()
   aud: string;
 

@@ -7,22 +7,22 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CommonResponseDto } from '../core/common/dto/express-response.dto';
+import { CommonResponse } from '../core/common/dto/express-response.dto';
 
 @Injectable()
 export class ResponseInterceptor<T>
-  implements NestInterceptor<T, CommonResponseDto<T>>
+  implements NestInterceptor<T, CommonResponse>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<CommonResponseDto<T>> {
+  ): Observable<CommonResponse> {
     return next.handle().pipe(
-      map((data) => ({
-        statusCode: context.switchToHttp().getResponse().statusCode,
-        message: 'Success',
-        data,
-      })),
+      map((data) => {
+        return {
+          ...data,
+        };
+      }),
     );
   }
 }

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as authenticatedLayoutImport } from './routes/(authenticated)/_layout'
@@ -27,6 +28,12 @@ const authenticatedImport = createFileRoute('/(authenticated)')()
 
 const authenticatedRoute = authenticatedImport.update({
   id: '/(authenticated)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -75,6 +82,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/(authenticated)': {
@@ -138,6 +152,7 @@ const authenticatedRouteWithChildren = authenticatedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof authenticatedLayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/abc': typeof authenticatedLayoutAbcRoute
   '/ssc': typeof authenticatedLayoutSscRoute
 }
@@ -145,6 +160,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof authenticatedLayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/abc': typeof authenticatedLayoutAbcRoute
   '/ssc': typeof authenticatedLayoutSscRoute
 }
@@ -153,6 +169,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/(authenticated)': typeof authenticatedRouteWithChildren
   '/(authenticated)/_layout': typeof authenticatedLayoutRouteWithChildren
   '/(authenticated)/_layout/abc': typeof authenticatedLayoutAbcRoute
@@ -161,13 +178,14 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/abc' | '/ssc'
+  fullPaths: '/' | '/login' | '/signup' | '/abc' | '/ssc'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/abc' | '/ssc'
+  to: '/' | '/login' | '/signup' | '/abc' | '/ssc'
   id:
     | '__root__'
     | '/'
     | '/login'
+    | '/signup'
     | '/(authenticated)'
     | '/(authenticated)/_layout'
     | '/(authenticated)/_layout/abc'
@@ -178,12 +196,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
   authenticatedRoute: typeof authenticatedRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
   authenticatedRoute: authenticatedRouteWithChildren,
 }
 
@@ -199,6 +219,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
+        "/signup",
         "/(authenticated)"
       ]
     },
@@ -207,6 +228,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/(authenticated)": {
       "filePath": "(authenticated)",

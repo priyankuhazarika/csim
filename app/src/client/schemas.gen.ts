@@ -13,23 +13,32 @@ export const SignUpReqBodySchema = {
   required: ["email", "password"],
 } as const;
 
-export const CommonResponseDtoSchema = {
+export const SignUpSchema = {
   type: "object",
   properties: {
-    statusCode: {
-      type: "number",
-    },
-    message: {
+    aud: {
       type: "string",
     },
-    data: {
+    email: {
+      type: "string",
+    },
+    id: {
+      type: "string",
+    },
+    created_at: {
+      type: "string",
+    },
+    updated_at: {
+      type: "string",
+    },
+    user_metadata: {
       type: "object",
     },
   },
-  required: ["statusCode", "message", "data"],
+  required: ["aud", "email", "id", "created_at", "updated_at", "user_metadata"],
 } as const;
 
-export const ErrorResponseDtoSchema = {
+export const ErrorResponseSchema = {
   type: "object",
   properties: {
     statusCode: {
@@ -38,15 +47,69 @@ export const ErrorResponseDtoSchema = {
     message: {
       type: "string",
     },
-    error: {
+  },
+  required: ["statusCode", "message"],
+} as const;
+
+export const LoginReqBodySchema = {
+  type: "object",
+  properties: {
+    email: {
       type: "string",
     },
-    timestamp: {
-      type: "string",
-    },
-    path: {
+    password: {
       type: "string",
     },
   },
-  required: ["statusCode", "message", "error", "timestamp", "path"],
+  required: ["email", "password"],
+} as const;
+
+export const LoginSchema = {
+  type: "object",
+  properties: {
+    aud: {
+      type: "string",
+    },
+    email: {
+      type: "string",
+    },
+    id: {
+      type: "string",
+    },
+    created_at: {
+      type: "string",
+    },
+    updated_at: {
+      type: "string",
+    },
+    user_metadata: {
+      type: "object",
+    },
+  },
+  required: ["aud", "email", "id", "created_at", "updated_at", "user_metadata"],
+} as const;
+
+export const ProfileSchema = {
+  type: "object",
+  properties: {
+    aud: {
+      type: "string",
+    },
+    email: {
+      type: "string",
+    },
+    id: {
+      type: "string",
+    },
+    created_at: {
+      type: "string",
+    },
+    updated_at: {
+      type: "string",
+    },
+    user_metadata: {
+      type: "object",
+    },
+  },
+  required: ["aud", "email", "id", "created_at", "updated_at", "user_metadata"],
 } as const;

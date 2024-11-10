@@ -1,4 +1,4 @@
-import { authControllerLogin, ErrorResponse } from "@/client";
+import { authControllerSignUp, ErrorResponse } from "@/client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,12 +17,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/signup")({
   beforeLoad: ({ context }) => {
     if (context.auth.isLoggedIn) {
       throw redirect({
@@ -30,7 +35,7 @@ export const Route = createFileRoute("/login")({
       });
     }
   },
-  component: Login,
+  component: Signup,
 });
 
 const formSchema = z.object({
@@ -43,7 +48,8 @@ const formSchema = z.object({
   password: z.string().min(1, { message: "Password cannot be empty!" }),
 });
 
-function Login() {
+function Signup() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,13 +61,13 @@ function Login() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await authControllerLogin({
+      await authControllerSignUp({
         body: {
           email: values.email,
           password: values.password,
         },
       });
-      window.location.reload();
+      navigate({ to: "/abc" });
 
       console.log(values);
     } catch (error: unknown) {
@@ -72,13 +78,14 @@ function Login() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
   }
+
   return (
     <div className="flex h-screen w-full items-center justify-center px-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Create an account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -124,12 +131,12 @@ function Login() {
                   className="mt-2"
                   loading={form.formState.isSubmitting}
                 >
-                  Login
+                  Signup
                 </Button>
                 <div className="mt-0 text-center text-sm">
-                  Don't have an account?{" "}
-                  <Link to="/signup" className="underline">
-                    Signup
+                  Already have an account?{" "}
+                  <Link to="/login" className="underline">
+                    Login
                   </Link>
                 </div>
               </div>

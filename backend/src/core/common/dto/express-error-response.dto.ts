@@ -1,19 +1,10 @@
 // dto/error-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ErrorResponseDto {
+export class ErrorResponse {
   @ApiProperty()
   statusCode: number;
 
   @ApiProperty()
   message: string;
-
-  @ApiProperty()
-  error: string;
-
-  @ApiProperty()
-  timestamp: string;
-
-  @ApiProperty()
-  path: string;
 }

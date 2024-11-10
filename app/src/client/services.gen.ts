@@ -13,8 +13,11 @@ import type {
   AuthControllerSignUpData,
   AuthControllerSignUpError,
   AuthControllerSignUpResponse,
-  AuthControllerMeError,
-  AuthControllerMeResponse,
+  AuthControllerLoginData,
+  AuthControllerLoginError,
+  AuthControllerLoginResponse,
+  AuthControllerProfileError,
+  AuthControllerProfileResponse,
 } from "./types.gen";
 
 export const client = createClient(createConfig());
@@ -54,19 +57,32 @@ export const authControllerSignUp = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     ...options,
-    url: "/auth",
+    url: "/auth/signup",
   });
 };
 
-export const authControllerMe = <ThrowOnError extends boolean = false>(
-  options?: Options<unknown, ThrowOnError>,
+export const authControllerLogin = <ThrowOnError extends boolean = false>(
+  options: Options<AuthControllerLoginData, ThrowOnError>,
 ) => {
-  return (options?.client ?? client).get<
-    AuthControllerMeResponse,
-    AuthControllerMeError,
+  return (options?.client ?? client).post<
+    AuthControllerLoginResponse,
+    AuthControllerLoginError,
     ThrowOnError
   >({
     ...options,
-    url: "/auth",
+    url: "/auth/login",
+  });
+};
+
+export const authControllerProfile = <ThrowOnError extends boolean = false>(
+  options?: Options<unknown, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    AuthControllerProfileResponse,
+    AuthControllerProfileError,
+    ThrowOnError
+  >({
+    ...options,
+    url: "/auth/profile",
   });
 };

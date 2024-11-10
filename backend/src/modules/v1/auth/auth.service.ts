@@ -13,4 +13,11 @@ export class AuthService {
       password,
     });
   }
+
+  async loginUser(email: string, password: string) {
+    return this.supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+  }
 }
