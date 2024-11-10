@@ -21,6 +21,7 @@ export class OrgsController {
     type: ErrorResponse,
   })
   async me(@Req() request: AuthenticatedRequest) {
+    console.log('request', request);
     return {
       message: 'User',
       statusCode: HttpStatus.OK,
