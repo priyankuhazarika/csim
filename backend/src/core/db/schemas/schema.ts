@@ -1,14 +1,14 @@
 import {
   integer,
+  jsonb,
+  numeric,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uuid,
   varchar,
-  numeric,
-  jsonb,
 } from 'drizzle-orm/pg-core';
-import { sql } from 'drizzle-orm';
 
 export type ChargepointConfigurationType = {
   key: string;
@@ -20,16 +20,31 @@ export type ChargepointConfigurationType = {
   description: string;
 };
 
+export const profiles = pgTable('profiles', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  email: varchar('email', { length: 255 }).notNull(),
+  raw_user_meta_data: jsonb('raw_user_meta_data').$type<object>(),
+  phone: text('phone'),
+  created_at: timestamp('created_at', { withTimezone: true, mode: 'date' })
+    .defaultNow()
+    .notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true, mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
 export const baseFields = {
   created_at: timestamp('created_at', { withTimezone: true, mode: 'date' })
     .defaultNow()
     .notNull(),
-  created_by: uuid('created_by').notNull(),
+  created_by: uuid('created_by')
+    .notNull()
+    .references(() => profiles.id, { onDelete: 'cascade' }),
   updated_at: timestamp('updated_at', { withTimezone: true, mode: 'date' })
     .defaultNow()
     .notNull()
     .$onUpdate(() => new Date()),
-  updated_by: uuid('updated_by').notNull(),
+  updated_by: uuid('updated_by'),
 };
 
 export const organizations = pgTable('organizations', {
@@ -39,6 +54,24 @@ export const organizations = pgTable('organizations', {
   description: text('description'),
   ...baseFields,
 });
+
+export const usersOrganizations = pgTable(
+  'usersOrganizations',
+  {
+    user_id: uuid('user_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    organization_id: uuid('organization_id')
+      .notNull()
+      .references(() => organizations.id, { onDelete: 'cascade' }),
+    ...baseFields,
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.user_id, table.organization_id] }),
+    };
+  },
+);
 
 export const chargepoints = pgTable('chargepoints', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -76,6 +109,9 @@ export const connectors = pgTable('connectors', {
   ...baseFields,
 });
 
+export type InsertProfile = typeof profiles.$inferInsert;
+export type Profile = typeof profiles.$inferSelect;
+
 export type InsertOrganization = typeof organizations.$inferInsert;
 export type Organization = typeof organizations.$inferSelect;
 
@@ -87,31 +123,42 @@ export type Connector = typeof connectors.$inferSelect;
 
 // Define a raw SQL migration script to add foreign key constraints
 // Execute this code manually to reference the Supabase auth's default users table
-export const addForeignKeyConstraints = sql`
-        ALTER TABLE organizations
-        ADD CONSTRAINT fk_created_by
-        FOREIGN KEY (created_by)
-        REFERENCES auth.users(id),
-        ADD CONSTRAINT fk_updated_by
-        FOREIGN KEY (updated_by)
-        REFERENCES auth.users(id);
-    
-        ALTER TABLE chargepoints
-        ADD CONSTRAINT fk_created_by
-        FOREIGN KEY (created_by)
-        REFERENCES auth.users(id),
-        ADD CONSTRAINT fk_updated_by
-        FOREIGN KEY (updated_by)
-        REFERENCES auth.users(id);
-    
-        ALTER TABLE connectors
-        ADD CONSTRAINT fk_created_by
-        FOREIGN KEY (created_by)
-        REFERENCES auth.users(id),
-        ADD CONSTRAINT fk_updated_by
-        FOREIGN KEY (updated_by)
-        REFERENCES auth.users(id);
-    `;
+// export const addForeignKeyConstraints = sql`
+//         ALTER TABLE organizations
+//         ADD CONSTRAINT fk_created_by
+//         FOREIGN KEY (created_by)
+//         REFERENCES auth.users(id),
+//         ADD CONSTRAINT fk_updated_by
+//         FOREIGN KEY (updated_by)
+//         REFERENCES auth.users(id);
+
+//         ALTER TABLE chargepoints
+//         ADD CONSTRAINT fk_created_by
+//         FOREIGN KEY (created_by)
+//         REFERENCES auth.users(id),
+//         ADD CONSTRAINT fk_updated_by
+//         FOREIGN KEY (updated_by)
+//         REFERENCES auth.users(id);
+
+//         ALTER TABLE connectors
+//         ADD CONSTRAINT fk_created_by
+//         FOREIGN KEY (created_by)
+//         REFERENCES auth.users(id),
+//         ADD CONSTRAINT fk_updated_by
+//         FOREIGN KEY (updated_by)
+//         REFERENCES auth.users(id);
+
+//         ALTER TABLE usersOrganizations
+//         ADD CONSTRAINT fk_created_by
+//         FOREIGN KEY (created_by)
+//         REFERENCES auth.users(id),
+//         ADD CONSTRAINT fk_updated_by
+//         FOREIGN KEY (updated_by)
+//         REFERENCES auth.users(id),
+//         ADD CONSTRAINT fk_user_id
+//         FOREIGN KEY (user_id)
+//         REFERENCES auth.users(id);
+//     `;
 
 /**
        * post_text: text("post_text"),

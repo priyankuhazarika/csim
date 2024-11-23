@@ -46,6 +46,7 @@ export class AuthController {
       );
 
       if (userResponse?.error) {
+        console.log('error', userResponse);
         throw new HttpException(
           {
             statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -74,6 +75,7 @@ export class AuthController {
         user_metadata: userResponse.data.user.user_metadata,
       };
     } catch (error) {
+      console.log('error', error);
       throw new HttpException(
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

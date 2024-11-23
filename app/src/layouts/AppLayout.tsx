@@ -40,7 +40,7 @@ export default function AppLayout() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="pl-5 pt-5 pr-5">
+        <main className="pl-6 pt-5 pr-6">
           <Outlet />
         </main>
       </SidebarInset>

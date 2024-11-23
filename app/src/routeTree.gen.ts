@@ -18,6 +18,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as authenticatedLayoutImport } from './routes/(authenticated)/_layout'
 import { Route as authenticatedLayoutSscImport } from './routes/(authenticated)/_layout/ssc'
+import { Route as authenticatedLayoutCreateChargepointImport } from './routes/(authenticated)/_layout/createChargepoint'
 import { Route as authenticatedLayoutAbcImport } from './routes/(authenticated)/_layout/abc'
 
 // Create Virtual Routes
@@ -59,6 +60,13 @@ const authenticatedLayoutSscRoute = authenticatedLayoutSscImport.update({
   path: '/ssc',
   getParentRoute: () => authenticatedLayoutRoute,
 } as any)
+
+const authenticatedLayoutCreateChargepointRoute =
+  authenticatedLayoutCreateChargepointImport.update({
+    id: '/createChargepoint',
+    path: '/createChargepoint',
+    getParentRoute: () => authenticatedLayoutRoute,
+  } as any)
 
 const authenticatedLayoutAbcRoute = authenticatedLayoutAbcImport.update({
   id: '/abc',
@@ -112,6 +120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedLayoutAbcImport
       parentRoute: typeof authenticatedLayoutImport
     }
+    '/(authenticated)/_layout/createChargepoint': {
+      id: '/(authenticated)/_layout/createChargepoint'
+      path: '/createChargepoint'
+      fullPath: '/createChargepoint'
+      preLoaderRoute: typeof authenticatedLayoutCreateChargepointImport
+      parentRoute: typeof authenticatedLayoutImport
+    }
     '/(authenticated)/_layout/ssc': {
       id: '/(authenticated)/_layout/ssc'
       path: '/ssc'
@@ -126,11 +141,14 @@ declare module '@tanstack/react-router' {
 
 interface authenticatedLayoutRouteChildren {
   authenticatedLayoutAbcRoute: typeof authenticatedLayoutAbcRoute
+  authenticatedLayoutCreateChargepointRoute: typeof authenticatedLayoutCreateChargepointRoute
   authenticatedLayoutSscRoute: typeof authenticatedLayoutSscRoute
 }
 
 const authenticatedLayoutRouteChildren: authenticatedLayoutRouteChildren = {
   authenticatedLayoutAbcRoute: authenticatedLayoutAbcRoute,
+  authenticatedLayoutCreateChargepointRoute:
+    authenticatedLayoutCreateChargepointRoute,
   authenticatedLayoutSscRoute: authenticatedLayoutSscRoute,
 }
 
@@ -154,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/abc': typeof authenticatedLayoutAbcRoute
+  '/createChargepoint': typeof authenticatedLayoutCreateChargepointRoute
   '/ssc': typeof authenticatedLayoutSscRoute
 }
 
@@ -162,6 +181,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/abc': typeof authenticatedLayoutAbcRoute
+  '/createChargepoint': typeof authenticatedLayoutCreateChargepointRoute
   '/ssc': typeof authenticatedLayoutSscRoute
 }
 
@@ -173,14 +193,15 @@ export interface FileRoutesById {
   '/(authenticated)': typeof authenticatedRouteWithChildren
   '/(authenticated)/_layout': typeof authenticatedLayoutRouteWithChildren
   '/(authenticated)/_layout/abc': typeof authenticatedLayoutAbcRoute
+  '/(authenticated)/_layout/createChargepoint': typeof authenticatedLayoutCreateChargepointRoute
   '/(authenticated)/_layout/ssc': typeof authenticatedLayoutSscRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signup' | '/abc' | '/ssc'
+  fullPaths: '/' | '/login' | '/signup' | '/abc' | '/createChargepoint' | '/ssc'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup' | '/abc' | '/ssc'
+  to: '/' | '/login' | '/signup' | '/abc' | '/createChargepoint' | '/ssc'
   id:
     | '__root__'
     | '/'
@@ -189,6 +210,7 @@ export interface FileRouteTypes {
     | '/(authenticated)'
     | '/(authenticated)/_layout'
     | '/(authenticated)/_layout/abc'
+    | '/(authenticated)/_layout/createChargepoint'
     | '/(authenticated)/_layout/ssc'
   fileRoutesById: FileRoutesById
 }
@@ -243,11 +265,16 @@ export const routeTree = rootRoute
       "parent": "/(authenticated)",
       "children": [
         "/(authenticated)/_layout/abc",
+        "/(authenticated)/_layout/createChargepoint",
         "/(authenticated)/_layout/ssc"
       ]
     },
     "/(authenticated)/_layout/abc": {
       "filePath": "(authenticated)/_layout/abc.tsx",
+      "parent": "/(authenticated)/_layout"
+    },
+    "/(authenticated)/_layout/createChargepoint": {
+      "filePath": "(authenticated)/_layout/createChargepoint.tsx",
       "parent": "/(authenticated)/_layout"
     },
     "/(authenticated)/_layout/ssc": {

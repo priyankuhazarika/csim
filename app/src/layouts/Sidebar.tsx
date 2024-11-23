@@ -51,38 +51,38 @@ const data = {
       items: [
         {
           title: "Deployed",
-          url: "#",
+          url: "/abc",
         },
         {
           title: "Undeployed",
-          url: "#",
+          url: "/ssc",
         },
         {
-          title: "Create",
-          url: "#",
+          title: "Build Chargepoint",
+          url: "/createChargepoint",
         },
       ],
     },
-    {
-      title: "Energy",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "Deployed",
-          url: "#",
-        },
-        {
-          title: "Undeployed",
-          url: "#",
-        },
-        {
-          title: "Create",
-          url: "#",
-        },
-      ],
-    },
+    // {
+    //   title: "Energy",
+    //   url: "#",
+    //   icon: SquareTerminal,
+    //   isActive: true,
+    //   items: [
+    //     {
+    //       title: "Deployed",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Undeployed",
+    //       url: "#",
+    //     },
+    //     {
+    //       title: "Create",
+    //       url: "#",
+    //     },
+    //   ],
+    // },
     // {
     //   title: "Charging Sessions",
     //   url: "#",
